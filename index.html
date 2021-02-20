@@ -85,6 +85,12 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchAll() {
         // TODO
+        fetch(document.getElementById('endpoint').value).then(function (response){
+          response.json().then(function (data) {
+            document.getElementById("output").innerHTML = JSON.stringify(data);
+          });
+        })
+
       }
 
       // This function should fetch one entry from the given endpoint.
@@ -93,22 +99,71 @@
       // the writeup to view the URL pattern for fetch one and fetch all
       function fetchOne() {
         // TODO
+        fetch(document.getElementById('endpoint').value+'/'+prompt('ID')).then(function (response){
+          response.json().then(function (data) {
+            document.getElementById("output").innerHTML = JSON.stringify(data);
+          });
+        })
       }
 
       // This function should use fetch to create one entry in the given endpoint.
       // From the 4 CRUD actions, this is the CREATE action, and uses the POST http method.
       // The main difference from updateRecord() will be the URL you send data to; check
       // the writeup to view the URL pattern for create and update
-      function createRecord() {
+      function createRecord(type) {
         // TODO
+        if(type=="submit"){
+          var title = document.getElementById('title').value;
+          var author = document.getElementById('author').value;
+          fetch(document.getElementById('endpoint').value, 
+          {method: "POST",
+          headers:{ "Content-Type": "application/json"},
+          body:JSON.stringify({
+            "title": title,
+            "author": author
+          })
+          }).then(function (response){
+          response.json().then(function (data) {
+            document.getElementById('recordForm').style.display = 'none';
+            document.getElementById("output").innerHTML = JSON.stringify(data);
+          });
+        })
+        }
+        else{
+          document.getElementById('recordForm').style.display = 'block';
+          document.getElementById('recordIDcontainer').style.display = 'none';
+        }
       }
 
       // This function should use fetch to update one existing entry in the given endpoint.
       // From the 4 CRUD actions, this is the UPDATE action, and uses the PUT http method.
       // The main difference from createRecord() will be the URL you send data to; check
       // the writeup to view the URL pattern for create and update
-      function updateRecord() {
+      function updateRecord(type) {
         // TODO
+        if(type=="submit"){
+          var title = document.getElementById('title').value;
+          var author = document.getElementById('author').value;
+          var ID = document.getElementById('recordID').value;
+          fetch(document.getElementById('endpoint').value+"/"+ID, 
+          {method: "PUT",
+          headers:{ "Content-Type": "application/json"},
+          body:JSON.stringify({
+            "title": title,
+            "author": author,
+            "id": ID
+          })
+          }).then(function (response){
+          response.json().then(function (data) {
+            document.getElementById('recordForm').style.display = 'none';
+            document.getElementById("output").innerHTML = JSON.stringify(data);
+          });
+        })
+        }
+        else{
+          document.getElementById('recordForm').style.display = 'block';
+          document.getElementById('recordIDcontainer').style.display = 'block';
+        }
       }
 
       // This function should use fetch to delete one existing entry in the given endpoint.
@@ -118,6 +173,12 @@
       // delete all, only delete one.
       function deleteRecord() {
         // TODO
+        fetch(document.getElementById('endpoint').value+'/'+prompt('ID'), 
+          {method: "delete"}).then(function (response){
+          response.json().then(function (data) {
+            document.getElementById("output").innerHTML = JSON.stringify(data);
+          });
+        })
       }
 
       window.addEventListener('DOMContentLoaded', () => {
